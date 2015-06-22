@@ -1,2 +1,6 @@
 # Arduino_Ball_Sorter
-Robotics 200 
+Robotics (RBT200) Ball sorter project.
+
+To do:
+incorporate calibration and sensor recognition modules
+
