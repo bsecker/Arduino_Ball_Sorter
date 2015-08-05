@@ -5,8 +5,6 @@ import pygame
 import pygame.camera
 from pygame.locals import *
 import colorsys
-
-import RPi.GPIO as GPIO
 import time
 import serial
 
@@ -52,13 +50,16 @@ def get_colour(hsv):
     return detected
 
 def terminate():
-    """flush everything and close everything down nicely"""
+    """flush serial buffer and close everything down nicely"""
+    arduino_serial.ser.close()
     pygame.quit()
     sys.exit()
     
 
 def main():
     pygame.camera.init()
+    
+    global arduino_serial
     arduino_serial = ArduinoSerial()
     
     screen = pygame.display.set_mode((320,240),0)
