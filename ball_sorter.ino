@@ -1,7 +1,5 @@
 
 /*
-To do:
-  -Find Buzzer from old arduino robot
   
 Sorting Mechanism:
   -Goes from 0 (minimum) to 160 (maximum) as a nice way of doing things. 
@@ -15,12 +13,15 @@ Sorting Mechanism:
 */
 #include <Servo.h>
 
+#define sort_servo_pin 11
+#define input_servo_pin 9
+
 Servo input_servo;
 Servo sort_servo;
 
 int input_servo_pos = 0;
-int input_servo_rest_pos = 45;
-int input_servo_open_pos = 30;
+int input_servo_rest_pos = 175;
+int input_servo_open_pos = 135;
 int input_servo_open_time = 250;
 
 int sort_servo_pos = 0;
@@ -31,10 +32,10 @@ String colour;
 int current_colour = 0;
 
 void setup() {
-  input_servo.attach(9); // attaches the servo on pin 9 to the servo object 
+  input_servo.attach(input_servo_pin); // attaches the servo on pin 9 to the servo object 
   input_servo.write(input_servo_rest_pos); // move servo to rest position
   
-  sort_servo.attach(10); //attaches the servo on pin 10 to the servo object 
+  sort_servo.attach(sort_servo_pin); //attaches the servo on pin 10 to the servo object 
   sort_servo.write(sort_servo_rest_pos); //move servo to rest position
   
   Serial.begin(9600);
@@ -42,20 +43,10 @@ void setup() {
 }
 
 void loop() {
-  if(Serial.available() > 0){
-   //read incoming byte:
-    int s_parsed;
-    s_parsed = Serial.parseInt();
-    Serial.println(s_parsed);
-    
-    s_sort(s_parsed);
-    Serial.print("s_parsed:");
-    Serial.println(s_parsed);
-    Serial.print("current_colour:");
-    Serial.println(current_colour);
-    i_pass();
+    if(Serial.available()){
+       s_sort(Serial.read()-'0');
+    }
   }
-}
 
 void loop_array_test(){
   //loops through a set array of positions
@@ -72,6 +63,7 @@ void loop_array_test(){
 }
 
 //Colour Sensor Functions
+//------------------------------------------
 int sens_read(){
    //return sensor reading
   return 2;
@@ -86,14 +78,14 @@ void i_pass() {
 }
 
 void i_pass_all() {
-  //open servo and allow all balls to pass through (!debug) 
+  //open servo and allow all balls to pass through (debug!) 
   input_servo.write(input_servo_open_pos);
   delay(2000); //delay two seconds to let all balls through
   input_servo.write(input_servo_rest_pos);
 }
 
 //sorting mechanism functions
-
+//----------------------------------------------
 void s_sort(int colour){
   //take input (colour) and rotate to send balls to appropriate output. Return if true.:
   if(colour==0){
@@ -112,8 +104,7 @@ void s_sort(int colour){
    //unknown colour
     sort_servo.write(160); 
   }
-  
-  current_colour = colour;
+ 
   
   delay(500);
 }
