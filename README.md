@@ -10,9 +10,6 @@ ball_sorter.ino - the arduino code for the ball sorter. Contains code that conve
 
 colour_sensor.ino - depreciated code for the analogue TCS230 colour sensor module. Shamelessly stolen off the internet and no longer used.
 
-To do:
 
--incorporate some kind of buffer to prevent overloading the arduino
 
--make the input servo work and fix timing 
-
+IMPORTANT: To do list in now kept in ISSUES section
