@@ -8,7 +8,11 @@ pygameCamera.py - the python code that will be used on the raspberry pi. Contain
 
 ball_sorter.ino - the arduino code for the ball sorter. Contains code that converts serial messages to servo movement and co-ordinates two servos.
 
-colour_sensor.ino - depreciated code for the analogue TCS230 colour sensor module. Shamelessly stolen off the internet and unused.
+colour_sensor.ino - depreciated code for the analogue TCS230 colour sensor module. Shamelessly stolen off the internet and no longer used.
 
 To do:
+
+-incorporate some kind of buffer to prevent overloading the arduino
+
+-make the input servo work and fix timing 
 
