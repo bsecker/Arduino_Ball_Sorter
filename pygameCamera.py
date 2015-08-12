@@ -11,6 +11,20 @@ import serial
 class ArduinoSerial:
     def __init__(self):
         self.ser = serial.Serial('/dev/ttyUSB3',9600)
+        collect_readings = False
+        self.colours = []
+        self.max_readings = 50 #maximum number of readings to use
+
+    def add(self, colour):
+        self.colours.append(colour)
+        if self.colours >= self.max_readings:
+            _mode = max(set(self.colours), key=self.colours.count)
+            print "most common value: ", _mode
+            self.writeOut(_mode)
+            collect_readings = False
+            self.colours = []
+            
+
         
     def writeOut(self, colour):
         _col = ""
@@ -59,7 +73,7 @@ def terminate():
 def main():
     pygame.camera.init()
     
-    global arduino_serial
+    global arduino_serial, collect_readings
     arduino_serial = ArduinoSerial()
     
     screen = pygame.display.set_mode((320,240),0)
@@ -96,10 +110,9 @@ def main():
         detected = get_colour(hsv)
         
               
-        if detected != last_detected:
+        if collect_readings == True:
             print detected
-            arduino_serial.writeOut(detected)
-            last_detected = detected
+            arduino_serial.add(detected)
             
 
         screen.fill(ccolor, (0,0,50,50))
