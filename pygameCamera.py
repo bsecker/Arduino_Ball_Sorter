@@ -17,7 +17,7 @@ class ArduinoSerial:
 
     def add(self, colour):
         self.colours.append(colour)
-        if self.colours >= self.max_readings:
+        if len(self.colours) >= self.max_readings:
             _mode = max(set(self.colours), key=self.colours.count)
             print "most common value: ", _mode
             self.writeOut(_mode)
