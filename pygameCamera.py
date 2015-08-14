@@ -26,6 +26,7 @@ class ArduinoSerial:
 
         
     def writeOut(self, colour):
+        """Send commands to arduino"""
         _col = ""
         if colour == "none":
             _col = "0"
@@ -90,7 +91,8 @@ def calibrate():
                     print 'done calibration'
 
 
-
+    print 'original hues: [[31,331],[31,43],[43,57],[151,211]'
+    print 'calibrated hues:',_hues
     return _hues
     #return [[31,331],[31,43],[43,57],[151,211]
 
