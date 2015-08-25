@@ -1,6 +1,5 @@
 
 /*
-  
 Sorting Mechanism:
   -Goes from 0 (minimum) to 160 (maximum) as a nice way of doing things. 
   (Roughly equates to 180° of movement)
@@ -11,25 +10,29 @@ Sorting Mechanism:
   3 - white
   4 - none
 */
+
 #include <Servo.h>
+#include "notes.h" //speaker notes
 
 #define sort_servo_pin 11
 #define input_servo_pin 9
+#define speaker 8
 
 Servo input_servo;
 Servo sort_servo;
 
 int input_servo_pos = 0;
-int input_servo_rest_pos = 175;
-int input_servo_open_pos = 135;
+int input_servo_rest_pos = 0;
+int input_servo_open_pos = 30;
 int input_servo_open_time = 250;
 
 int sort_servo_pos = 0;
 int sort_servo_rest_pos = 0;
 
-String colour;
-
 int current_colour = 0;
+
+int serial_buffer = 0;
+int buffer_time = 1000;
 
 void setup() {
   input_servo.attach(input_servo_pin); // attaches the servo on pin 9 to the servo object 
@@ -38,15 +41,29 @@ void setup() {
   sort_servo.attach(sort_servo_pin); //attaches the servo on pin 10 to the servo object 
   sort_servo.write(sort_servo_rest_pos); //move servo to rest position
   
+  // play tune on powerup / reset
+  pinMode(speaker,OUTPUT);
+  int melody[] = {NOTE_C4,NOTE_G3,NOTE_G3,NOTE_A3,NOTE_G3,0,NOTE_B3,NOTE_C4};
+  int noteDurations[] = {4,8,8,4,4,4,4,4};
+  for (byte Note = 0; Note < 8; Note++)        // Play eight notes
+  {
+    int noteDuration = 1000/noteDurations[Note];
+    tone(speaker,melody[Note],noteDuration);
+    int pauseBetweenNotes = noteDuration * 1.30;
+    delay(pauseBetweenNotes);
+  }  
+  
   Serial.begin(9600);
   delay(500); //for sanity
 }
 
 void loop() {
     if(Serial.available()){
-       s_sort(Serial.read()-'0');
+        s_sort(Serial.read()-'0');
+        i_pass();
+      }
     }
-  }
+
 
 void loop_array_test(){
   //loops through a set array of positions
@@ -107,4 +124,12 @@ void s_sort(int colour){
  
   
   delay(500);
+}
+
+//Piezo Functions
+void sound_error(){
+  for (byte Note = 0; Note < 3; Note++){
+    tone(speaker,NOTE_G3,200);
+    delay(300); 
+  }
 }
