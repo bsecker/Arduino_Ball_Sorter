@@ -10,6 +10,10 @@ ball_sorter.ino - the arduino code for the ball sorter. Contains code that conve
 
 colour_sensor.ino - depreciated code for the analogue TCS230 colour sensor module. Shamelessly stolen off the internet and no longer used.
 
+notes.h - piezo note definitions.
+
+lcd_screen_test.ino - prototype sketch for the LCD screen with working serial input and counting functions.
+
 
 
 IMPORTANT: To do list in now kept in ISSUES section
