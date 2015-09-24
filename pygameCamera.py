@@ -154,7 +154,7 @@ def main():
     last_detected = ''
  
     #calibrate colours
-    calibrate()
+    #calibrate()
  
     while True:
         # reduce noise, average 5 frames
