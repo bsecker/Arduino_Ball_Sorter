@@ -11,6 +11,7 @@ Sorting Mechanism:
   4 - none
 */
 
+//set up variables and import libraries
 #include <Servo.h>
 #include "notes.h" //speaker notes
 
@@ -35,6 +36,7 @@ int serial_buffer = 0;
 int buffer_time = 1000;
 
 void setup() {
+  //initialise servos
   input_servo.attach(input_servo_pin); // attaches the servo on pin 9 to the servo object 
   input_servo.write(input_servo_rest_pos); // move servo to rest position
   
@@ -58,6 +60,9 @@ void setup() {
 }
 
 void loop() {
+  //main loop
+  
+  //pause until incoming serial command
     if(Serial.available()){
         s_sort(Serial.read()-'0');
         i_pass();
@@ -66,7 +71,7 @@ void loop() {
 
 
 void loop_array_test(){
-  //loops through a set array of positions
+  //loops through a set array of positions for testing
   int results[] = {0,3,1,4,2,0,2,0,3};
   int i;
   for(i = 0; i<5; i++){
