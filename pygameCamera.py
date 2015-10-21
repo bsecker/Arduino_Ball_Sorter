@@ -1,5 +1,6 @@
 #Arduino PyGame Camera and Serial Communication Module.
  
+#import necessary libraries
 import sys
 import pygame
 import pygame.camera
@@ -10,12 +11,14 @@ import serial
  
 class ArduinoSerial:
     def __init__(self):
+     """Main serial communication module that handles Writing to serial, Averaging and handling colour reading outputs"""
         self.ser = serial.Serial('/dev/ttyUSB3',9600)
         collect_readings = False
         self.colours = []
         self.max_readings = 50 #maximum number of readings to use
  
     def add(self, colour):
+        """Add colour to colour list or average list and send serial writeout with most common colour if list is too large"""
         self.colours.append(colour)
         if len(self.colours) >= self.max_readings:
             _mode = max(set(self.colours), key=self.colours.count)
@@ -26,7 +29,7 @@ class ArduinoSerial:
  
          
     def writeOut(self, colour):
-        """Send commands to arduino"""
+        """convert colour to appropriate integer and send command to arduino"""
         _col = ""
         if colour == "none":
             _col = "0"
@@ -41,7 +44,7 @@ class ArduinoSerial:
         self.ser.write(_col)
  
 def calibrate():
-    """startup function to calibrate the colour sensing"""
+    """startup function to calibrate the colour sensing. This isn't always enabled - only used when the ambient light in the room changes significantly."""
     print 'Performing initial calibration sequence...'
     print 'press colour id when ball is placed before gate for each colour.'
     _hues = [[31,331],[31,43],[43,57],[151,211] #default hues
@@ -61,7 +64,7 @@ def calibrate():
         screen.fill(ccolor, (0,0,50,50))
         pygame.display.flip()
          
-        for event in pygame.event.get():
+        for event in pygame.event.get(): #event getting loop
             if event.type == pygame.QUIT:
                 webcam.stop()
                 terminate()
@@ -101,13 +104,12 @@ def get_colour(hsv):
     if hsv[1]<0.2 : # check saturation. Can't use value because of AGC
         detected = 'none'
  
-        #00 - none, 01 - red, 10 - green 11 - blue
     else:
         # print int(hsv[0]*360), int(hsv[1]*100), int(hsv[2]*100),ccolor
         # conver HSV to color words
         if int(hsv[0]*360) < hue_list[0][0]:                # red nominally 0 deg
             detected = 'red'
-        elif int(hsv[0]*360) in range(hue_list[1][0],hue_list[1][1]):   # orange nomnally 36 deg
+        elif int(hsv[0]*360) in range(hue_list[1][0],hue_list[1][1]):   # orange nominally 36 deg
             detected = 'orange'
         elif int(hsv[0]*360) in range(hue_list[2][0],hue_list[2][1]):  # Yellow .... 50 Deg
             detected = 'yellow'
@@ -127,13 +129,14 @@ def terminate():
      
  
 def main():
-    pygame.camera.init()
+    pygame.camera.init() #initalise camera
      
+    
     global arduino_serial, collect_readings, hue_list
     collect_readings = False
     arduino_serial = ArduinoSerial()
  
-    hue_list = calibrate()
+    hue_list = calibrate() #comment this line out to disable calibration
          
     screen = pygame.display.set_mode((320,240),0)
     cam_list = pygame.camera.list_cameras()
@@ -152,9 +155,7 @@ def main():
  
     detected = 'none'
     last_detected = ''
- 
-    #calibrate colours
-    #calibrate()
+
  
     while True:
         # reduce noise, average 5 frames
@@ -171,22 +172,20 @@ def main():
          
         detected = get_colour(hsv)
          
-               
+        #add colour to list
         if collect_readings == True:
             print detected
             arduino_serial.add(detected)
              
- 
+        #update PyGame screen
         screen.fill(ccolor, (0,0,50,50))
         pygame.display.flip()
          
-        for event in pygame.event.get():
+        for event in pygame.event.get(): #event handling
             if event.type == pygame.QUIT:
                 webcam.stop()
                 terminate()
-            elif event.type
              
- 
 if __name__=="__main__":
     main()
  
