@@ -20,21 +20,27 @@
 #define WHITE   0xFFFF
 #define ORANGE  0xFD20
 
+//Initalize TFTLCD screen
 Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RESET);
 
+//define count of each colour (old)
 int red_count = 0;
 int orange_count = 0;
 int yellow_count = 0;
 int blue_count = 0;
 int unknown_count = 0;
 
+//init colours and counts of each colour.
 String colour_strings[] = {"RED","ORANGE","YELLOW","BLUE","UNKNOWN"};
 int colours[] = {RED, ORANGE, YELLOW, CYAN, GREEN};
 int colour_counts[] = {0,0,0,0,0};
+
+//define LCD drawing variables
 int tft_num_width = 200;
 int tft_bezel_width = 10;
 
 void setup(){
+ //initialize Serial and LCD screen
  Serial.begin(9600);
  tft.reset();
  uint16_t identifier = tft.readID();
@@ -50,6 +56,7 @@ void setup(){
 }
 
 void loop(){
+ //Wait for serial input before doing anything
  if(Serial.available()){
    count_colour(Serial.read()-'0');
    show_colours(); 
@@ -59,6 +66,8 @@ void loop(){
 }
 
 void count_colour(int colour){
+ //add 1 to appropriate colour
+ //if any number is used, the colour is unrecognised (4)
   if(colour<=3){
     colour_counts[colour]++; 
   }
@@ -68,6 +77,7 @@ void count_colour(int colour){
 }
 
 void show_colours(){
+ //iterate through colours and print each to the screen a little lower than the last.
   for(int i = 0; i <= 5; i++){
     tft.setCursor(tft_bezel_width, i*40+10);
     tft.setTextColor(colours[i], BLACK);
