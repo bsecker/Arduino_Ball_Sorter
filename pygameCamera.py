@@ -1,7 +1,7 @@
 #Arduino PyGame Camera and Serial Communication Module.
 #For an in-depth documentation on how the code works, see:
 #https://docs.google.com/presentation/d/1EglKOPJg7bWesM6bb773WEh6BpbUDmNyZhsR3al7E0Y/edit?usp=sharing
-#all code made by Benjamin Secker (https://github.com/bsecker/Arduino_Ball_Sorter/)
+#Benjamin Secker (https://github.com/bsecker/Arduino_Ball_Sorter/)
 #alot of this code self-explanatory but I have made comments where neccesary.
  
 #import necessary libraries
